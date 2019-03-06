@@ -1,0 +1,147 @@
+<track rows="6" version="1.8.3" name="Infinity" cols="20" index="0">
+ <t t="grass" o="0" i="0" j="0"/>
+ <t t="grass" o="0" i="0" j="1"/>
+ <t t="grass" o="0" i="0" j="2"/>
+ <t t="grass" o="0" i="0" j="3"/>
+ <t t="grass" o="0" i="0" j="4"/>
+ <t t="grass" o="0" i="0" j="5"/>
+ <t t="grass" o="0" i="1" j="0"/>
+ <t t="corner90" o="0" i="1" j="1"/>
+ <t t="straight" o="0" i="1" j="2" c="1"/>
+ <t t="straight" o="0" i="1" j="3"/>
+ <t t="corner90" o="-90" i="1" j="4"/>
+ <t t="grass" o="0" i="1" j="5"/>
+ <t t="grass" o="0" i="2" j="0"/>
+ <t t="straight" o="90" i="2" j="1"/>
+ <t t="grass" o="0" i="2" j="2"/>
+ <t t="grass" o="-90" i="2" j="3"/>
+ <t t="straight" o="90" i="2" j="4" c="1"/>
+ <t t="grass" o="0" i="2" j="5"/>
+ <t t="grass" o="0" i="3" j="0"/>
+ <t t="straight" o="90" i="3" j="1"/>
+ <t t="grass" o="90" i="3" j="2"/>
+ <t t="grass" o="270" i="3" j="3"/>
+ <t t="straight" o="90" i="3" j="4"/>
+ <t t="grass" o="0" i="3" j="5"/>
+ <t t="grass" o="0" i="4" j="0"/>
+ <t t="straight" o="90" i="4" j="1"/>
+ <t t="grass" o="90" i="4" j="2"/>
+ <t t="grass" o="270" i="4" j="3"/>
+ <t t="straight" o="90" i="4" j="4"/>
+ <t t="grass" o="0" i="4" j="5"/>
+ <t t="grass" o="0" i="5" j="0"/>
+ <t t="finish" o="90" i="5" j="1"/>
+ <t t="grass" o="90" i="5" j="2"/>
+ <t t="grass" o="270" i="5" j="3"/>
+ <t t="straight" o="90" i="5" j="4"/>
+ <t t="grass" o="0" i="5" j="5"/>
+ <t t="grass" o="0" i="6" j="0"/>
+ <t t="straight" o="90" i="6" j="1"/>
+ <t t="grass" o="90" i="6" j="2"/>
+ <t t="grass" o="270" i="6" j="3"/>
+ <t t="straight" o="90" i="6" j="4"/>
+ <t t="grass" o="0" i="6" j="5"/>
+ <t t="grass" o="0" i="7" j="0"/>
+ <t t="straight" o="90" i="7" j="1" c="1"/>
+ <t t="grass" o="90" i="7" j="2"/>
+ <t t="grass" o="180" i="7" j="3"/>
+ <t t="straight" o="90" i="7" j="4"/>
+ <t t="grass" o="0" i="7" j="5"/>
+ <t t="grass" o="0" i="8" j="0"/>
+ <t t="corner45Right" o="90" i="8" j="1"/>
+ <t t="straight45Female" o="90" i="8" j="2"/>
+ <t t="straight45Female" o="180" i="8" j="3"/>
+ <t t="corner45Left" o="-270" i="8" j="4"/>
+ <t t="grass" o="0" i="8" j="5"/>
+ <t t="grass" o="0" i="9" j="0"/>
+ <t t="straight45Female" o="-90" i="9" j="1"/>
+ <t t="corner45Right" o="-90" i="9" j="2"/>
+ <t t="corner45Left" o="-90" i="9" j="3"/>
+ <t t="straight45Female" o="0" i="9" j="4"/>
+ <t t="grass" o="0" i="9" j="5"/>
+ <t t="grass" o="0" i="10" j="0"/>
+ <t t="straight45Female" o="180" i="10" j="1"/>
+ <t t="corner45Left" o="90" i="10" j="2"/>
+ <t t="corner45Right" o="90" i="10" j="3"/>
+ <t t="straight45Female" o="90" i="10" j="4"/>
+ <t t="grass" o="0" i="10" j="5"/>
+ <t t="grass" o="0" i="11" j="0"/>
+ <t t="corner45Left" o="-90" i="11" j="1"/>
+ <t t="straight45Female" o="0" i="11" j="2"/>
+ <t t="straight45Female" o="-90" i="11" j="3"/>
+ <t t="corner45Right" o="-90" i="11" j="4"/>
+ <t t="grass" o="0" i="11" j="5"/>
+ <t t="grass" o="0" i="12" j="0"/>
+ <t t="straight" o="90" i="12" j="1"/>
+ <t t="grass" o="0" i="12" j="2"/>
+ <t t="grass" o="-90" i="12" j="3"/>
+ <t t="straight" o="90" i="12" j="4" c="1"/>
+ <t t="grass" o="0" i="12" j="5"/>
+ <t t="grass" o="0" i="13" j="0"/>
+ <t t="straight" o="90" i="13" j="1"/>
+ <t t="grass" o="90" i="13" j="2"/>
+ <t t="grass" o="270" i="13" j="3"/>
+ <t t="straight" o="90" i="13" j="4"/>
+ <t t="grass" o="0" i="13" j="5"/>
+ <t t="grass" o="0" i="14" j="0"/>
+ <t t="straight" o="90" i="14" j="1"/>
+ <t t="grass" o="90" i="14" j="2"/>
+ <t t="grass" o="270" i="14" j="3"/>
+ <t t="straight" o="90" i="14" j="4"/>
+ <t t="grass" o="0" i="14" j="5"/>
+ <t t="grass" o="0" i="15" j="0"/>
+ <t t="straight" o="90" i="15" j="1"/>
+ <t t="grass" o="90" i="15" j="2"/>
+ <t t="grass" o="270" i="15" j="3"/>
+ <t t="straight" o="90" i="15" j="4"/>
+ <t t="grass" o="0" i="15" j="5"/>
+ <t t="grass" o="0" i="16" j="0"/>
+ <t t="straight" o="90" i="16" j="1"/>
+ <t t="grass" o="90" i="16" j="2"/>
+ <t t="grass" o="270" i="16" j="3"/>
+ <t t="straight" o="90" i="16" j="4"/>
+ <t t="grass" o="0" i="16" j="5"/>
+ <t t="grass" o="0" i="17" j="0"/>
+ <t t="straight" o="90" i="17" j="1" c="1"/>
+ <t t="grass" o="90" i="17" j="2"/>
+ <t t="grass" o="180" i="17" j="3"/>
+ <t t="straight" o="90" i="17" j="4"/>
+ <t t="grass" o="0" i="17" j="5"/>
+ <t t="grass" o="0" i="18" j="0"/>
+ <t t="corner90" o="90" i="18" j="1"/>
+ <t t="straight" o="0" i="18" j="2"/>
+ <t t="straight" o="0" i="18" j="3" c="1"/>
+ <t t="corner90" o="-180" i="18" j="4"/>
+ <t t="grass" o="0" i="18" j="5"/>
+ <t t="grass" o="0" i="19" j="0"/>
+ <t t="grass" o="0" i="19" j="1"/>
+ <t t="grass" o="0" i="19" j="2"/>
+ <t t="grass" o="0" i="19" j="3"/>
+ <t t="grass" o="0" i="19" j="4"/>
+ <t t="grass" o="0" i="19" j="5"/>
+ <n i="0" y="379" x="1672" w="256" h="256"/>
+ <n i="1" y="388" x="1927" w="256" h="256"/>
+ <n i="2" y="461" x="2163" w="256" h="320"/>
+ <n i="3" y="584" x="2457" w="256" h="320"/>
+ <n i="4" y="583" x="2696" w="256" h="320"/>
+ <n i="5" y="466" x="2959" w="256" h="320"/>
+ <n i="6" y="384" x="3216" w="256" h="320"/>
+ <n i="7" y="373" x="4225" w="256" h="320"/>
+ <n i="8" y="419" x="4557" w="256" h="256"/>
+ <n i="9" y="571" x="4725" w="320" h="256"/>
+ <n i="10" y="789" x="4789" w="320" h="256"/>
+ <n i="11" y="1073" x="4651" w="256" h="320"/>
+ <n i="12" y="1154" x="4383" w="256" h="320"/>
+ <n i="13" y="1085" x="3013" w="256" h="320"/>
+ <n i="14" y="957" x="2661" w="256" h="320"/>
+ <n i="15" y="958" x="2431" w="256" h="320"/>
+ <n i="16" y="1100" x="2123" w="256" h="320"/>
+ <n i="17" y="1196" x="838" w="256" h="256"/>
+ <n i="18" y="1194" x="566" w="256" h="256"/>
+ <n i="19" y="971" x="320" w="320" h="256"/>
+ <n i="20" y="635" x="320" w="320" h="256"/>
+ <n i="21" y="461" x="425" w="256" h="256"/>
+ <n i="22" y="361" x="613" w="256" h="256"/>
+ <n i="23" y="373" x="1014" w="256" h="256"/>
+ <n i="24" y="379" x="1672" w="256" h="256"/>
+</track>
