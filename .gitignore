@@ -57,3 +57,4 @@ src/game/trackobjectfactory.cpp.orig
 *_plugin_import*
 *.Debug
 *.Release
+build/**
