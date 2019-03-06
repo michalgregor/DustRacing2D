@@ -394,7 +394,7 @@ void Race::updateRouteProgress(Car & car)
         if (!m_timing.raceCompleted(car.index()))
         {
             // Check is car is stuck and if so, move onto nearest asphalt tile.
-            if (!car.isHuman())
+            if (!car.isHuman() or Settings::instance().getResetStuckPlayer())
             {
                 checkIfCarIsStuck(car);
             }

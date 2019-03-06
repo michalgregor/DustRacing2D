@@ -97,7 +97,8 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer, MCWo
 , m_menuManager(nullptr)
 , m_intro(new Intro)
 , m_particleFactory(new ParticleFactory)
-, m_fadeAnimation(new FadeAnimation)
+, m_fadeAnimation(new FadeAnimation),
+  m_cameraSmoothing(1.0)
 {
     connect(m_startlights, &Startlights::raceStarted, &m_race, &Race::start);
     connect(m_startlights, &Startlights::animationEnded, &m_stateMachine, &StateMachine::endStartlightAnimation);
@@ -149,7 +150,9 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer, MCWo
 
     m_renderer.setFadeValue(0.0);
 
-    createMenus();
+//    if(!Settings::instance().getMenusDisabled())
+        createMenus();
+    m_cameraSmoothing = Settings::instance().getCameraSmoothing();
 }
 
 void Scene::setupAudio(Car & car, int index)
@@ -208,6 +211,10 @@ void Scene::createCars()
 
     m_timingOverlay[0].setCarToFollow(*m_cars.at(0));
     m_crashOverlay[0].setCarToFollow(*m_cars.at(0));
+}
+
+void Scene::startRace() {
+	m_race.start();
 }
 
 void Scene::setupMinimaps()
@@ -334,6 +341,10 @@ void Scene::updateCameraLocation(MCCamera & camera, float & offset, MCObject & o
 
     offset += (object.physicsComponent().velocity().lengthFast() - offset) * smooth;
     loc    += object.direction() * offset * offsetAmplification;
+
+    // additional camera smoothing for the cases when the controller oscillates
+    MCVector2dF oldLoc(camera.x(), camera.y());
+    loc = oldLoc + (loc - oldLoc) * m_cameraSmoothing;
 
     camera.setPos(loc.i(), loc.j());
 }

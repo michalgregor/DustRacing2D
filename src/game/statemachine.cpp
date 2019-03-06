@@ -15,6 +15,7 @@
 
 #include "statemachine.hpp"
 #include "inputhandler.hpp"
+#include "settings.hpp"
 
 #include <MenuManager>
 #include <cassert>
@@ -56,12 +57,17 @@ void StateMachine::quit()
 {
     if (m_state == StateMachine::State::Play)
     {
-        m_state = State::GameTransitionOut;
+    	if(Settings::instance().getMenusDisabled()) emit exitGameRequested();
+    	else m_state = State::GameTransitionOut;
     }
     else if (m_state == StateMachine::State::Menu)
     {
         emit exitGameRequested();
     }
+}
+
+void StateMachine::startGame() {
+	m_state = State::Play;
 }
 
 bool StateMachine::update()
@@ -185,7 +191,8 @@ void StateMachine::statePlay()
 
 void StateMachine::finishRace()
 {
-    m_state = State::GameTransitionOut;
+    if(Settings::instance().getMenusDisabled()) emit exitGameRequested();
+    else m_state = State::GameTransitionOut;
     m_raceFinished = true;
 }
 

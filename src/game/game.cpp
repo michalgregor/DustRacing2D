@@ -42,6 +42,9 @@
 #include <QScreen>
 #include <QSurfaceFormat>
 
+#include <QCommandLineOption>
+#include <QCommandLineParser>
+
 #include <cassert>
 
 static const unsigned int MAX_PLAYERS = 2;
@@ -63,21 +66,20 @@ Game::Game(int & argc, char ** argv)
 , m_updateFps(60)
 , m_updateDelay(1000 / m_updateFps)
 , m_timeStep(1000 / m_updateFps)
-, m_lapCount(m_settings.loadValue(Settings::lapCountKey(), 5))
+, m_lapCount(0)
 , m_paused(false)
 , m_renderElapsed(0)
 , m_fps(m_settings.loadValue(Settings::fpsKey()) == 30 ? Fps::Fps30 : Fps::Fps60)
 , m_mode(Mode::OnePlayerRace)
 , m_splitType(SplitType::Vertical)
-, m_audioWorker(new AudioWorker(
-      Scene::NUM_CARS, Settings::instance().loadValue(Settings::soundsKey(), true)))
+, m_audioWorker(nullptr)
 , m_audioThread(new QThread)
 , m_world(new MCWorld)
 {
     assert(!Game::m_instance);
     Game::m_instance = this;
 
-    parseArgs(argc, argv);
+    parseArgs();
 
     createRenderer();
 
@@ -95,8 +97,6 @@ Game::Game(int & argc, char ** argv)
     connect(m_eventHandler, &EventHandler::cursorHid, [this] () {
         m_renderer->setCursor(Qt::BlankCursor);
     });
-
-    connect(m_eventHandler, &EventHandler::soundRequested, m_audioWorker, &AudioWorker::playSound);
 
     connect(&m_updateTimer, &QTimer::timeout, [this] () {
         m_stateMachine->update();
@@ -124,18 +124,6 @@ Game & Game::instance()
     return *Game::m_instance;
 }
 
-static void printHelp()
-{
-    std::cout << std::endl << "Dust Racing 2D version " << VERSION << std::endl;
-    std::cout << Config::Common::COPYRIGHT << std::endl << std::endl;
-    std::cout << "Options:" << std::endl;
-    std::cout << "--help            Show this help." << std::endl;
-    std::cout << "--screen [index]  Force a certain screen on multi-display setups." << std::endl;
-    std::cout << "--lang [lang]     Force language: fi, fr, it, cs." << std::endl;
-    std::cout << "--no-vsync        Force vsync off." << std::endl;
-    std::cout << std::endl;
-}
-
 static void initTranslations(QTranslator & appTranslator, QGuiApplication & app, QString lang = "")
 {
     if (lang == "")
@@ -154,34 +142,111 @@ static void initTranslations(QTranslator & appTranslator, QGuiApplication & app,
     }
 }
 
-void Game::parseArgs(int argc, char ** argv)
+void Game::parseArgs()
 {
-    QString lang = "";
+	// command line options parser
+    QCommandLineParser parser;
+	parser.setApplicationDescription(QCoreApplication::translate("main",
+		"Plugin options are entered inside --PluginName \"-options\".\n"
+		"%1 %2\n"
+		"Copyright (c) 2011-2015 Jussi Lind."
+	).arg(Config::Game::GAME_NAME).arg(Config::Game::GAME_VERSION));
+	parser.addHelpOption();
+	parser.addVersionOption();
 
-    const std::vector<QString> args(argv, argv + argc);
-    for (unsigned int i = 0; i < args.size(); i++)
-    {
-        if (args[i] == "-h" || args[i] == "--help")
-        {
-            printHelp();
-            throw UserException("Exit due to help.");
-        }
-        else if (args[i] == "--screen" && (i + i) < args.size())
-        {
-            m_screenIndex = args[i + 1].toInt();
-            m_settings.saveValue(m_settings.screenKey(), m_screenIndex);
-        }
-        else if (args[i] == "--lang" && (i + i) < args.size())
-        {
-            lang = args[i + 1];
-        }
-        else if (args[i] == "--no-vsync")
-        {
-            m_forceNoVSync = true;
-        }
+    // add the options
+	QCommandLineOption vsyncOption(QStringList() << "n" << "no-vsync", QCoreApplication::translate("main", "Force vsync off."));
+	parser.addOption(vsyncOption);
+
+	QCommandLineOption langOption(QStringList() << "l" << "lang", QCoreApplication::translate("main", "Set the language."), "");
+	parser.addOption(langOption);
+
+    QCommandLineOption screenOption(QStringList() << "screen", QCoreApplication::translate("main", "Sets the number of the screen."));
+	parser.addOption(screenOption);
+
+	QCommandLineOption disableMenus(QStringList() << "d" << "disable-menus", QCoreApplication::translate("main", "Disable all menus and hop directly into the game."));
+	parser.addOption(disableMenus);
+
+	QCommandLineOption gameMode(QStringList() << "m" << "game-mode", QCoreApplication::translate("main", "Sets the game mode (OnePlayerRace|TwoPlayerRace|TimeTrial|Duel)."), "mode", "OnePlayerRace");
+	parser.addOption(gameMode);
+
+	QCommandLineOption customTrackFile(QStringList() << "t" << "custom-track-file", QCoreApplication::translate("main", "Sets the custom track file (only used with menus disabled)."), "file", "infinity.trk");
+	parser.addOption(customTrackFile);
+
+	QCommandLineOption fullscreenOpt(QStringList() << "f" << "fullscreen", QCoreApplication::translate("main", "Starts the game in fullscreen mode."));
+	parser.addOption(fullscreenOpt);
+
+	QCommandLineOption windowedOpt(QStringList() << "w" << "windowed", QCoreApplication::translate("main", "Starts the game in windowed mode."));
+	parser.addOption(windowedOpt);
+
+	QCommandLineOption hresOpt(QStringList() << "hres", QCoreApplication::translate("main", "Sets horizontal resolution."), "resolution");
+	parser.addOption(hresOpt);
+
+	QCommandLineOption vresOpt(QStringList() << "vres", "vertical-resolution", QCoreApplication::translate("main", "Sets vertical resolution."), "resolution");
+	parser.addOption(vresOpt);
+
+	QCommandLineOption lapCount(QStringList() << "lap-count", QCoreApplication::translate("main", "Sets the number of laps."), "laps", "5");
+	parser.addOption(lapCount);
+
+	QCommandLineOption disableSounds(QStringList() << "disable-sounds", QCoreApplication::translate("main", "Disables sounds."));
+	parser.addOption(disableSounds);
+
+	QCommandLineOption stuckPlayerCheck(QStringList() << "s" << "stuck-player", QCoreApplication::translate("main", "Enables checking whether players' cars are stuck."));
+	parser.addOption(stuckPlayerCheck);
+
+	QCommandLineOption cameraSmoothing(QStringList() << "camera-smoothing", QCoreApplication::translate("main", "Sets camera smoothing."), "(0, 1]", "0.05");
+	parser.addOption(cameraSmoothing);
+
+	// parse the options
+	parser.process(m_app);
+
+	m_settings.setMenusDisabled(parser.isSet(disableMenus));
+	m_settings.setGameMode(parser.value(gameMode));
+	m_settings.setCustomTrackFile(parser.value(customTrackFile));
+	m_settings.setLapCount(parser.value(lapCount).toInt());
+	m_settings.setResetStuckPlayer(parser.isSet(stuckPlayerCheck));
+	m_settings.setCameraSmoothing(parser.value(cameraSmoothing).toFloat());
+
+    m_lapCount = m_settings.getLapCount();
+
+    m_forceNoVSync = parser.isSet(vsyncOption);
+
+    if(parser.isSet(screenOption)) {
+        m_screenIndex = parser.value(screenOption).toInt();
+        m_settings.saveValue(m_settings.screenKey(), m_screenIndex);
     }
 
+    QString lang = "";
+    if(parser.isSet(langOption)) {
+        lang = parser.value(langOption);
+    }
+
+	if(parser.isSet(fullscreenOpt) || parser.isSet(windowedOpt) || parser.isSet(hresOpt) || parser.isSet(vresOpt)) {
+		int hRes, vRes;
+		bool fullscreen;
+		m_settings.loadResolution(hRes, vRes, fullscreen);
+
+		if(parser.isSet(fullscreenOpt)) fullscreen = true;
+		if(parser.isSet(windowedOpt)) fullscreen = false;
+		if(parser.isSet(hresOpt)) hRes = parser.value(hresOpt).toUInt();
+		if(parser.isSet(vresOpt)) vRes = parser.value(vresOpt).toUInt();
+
+		m_settings.setTermResolution(hRes, vRes, fullscreen);
+		m_settings.setUseTermResolution(true);
+	}
+
     initTranslations(m_appTranslator, m_app, lang);
+        
+    if(m_audioWorker) {
+        delete m_audioWorker;
+        m_audioWorker = nullptr;
+    }
+
+    m_audioWorker = new AudioWorker(
+        Scene::NUM_CARS, Settings::instance().loadValue(Settings::soundsKey(),
+        !parser.isSet(disableSounds)));
+
+    connect(m_eventHandler, &EventHandler::soundRequested, m_audioWorker, &AudioWorker::playSound);
 }
 
 void Game::createRenderer()
@@ -214,7 +279,7 @@ void Game::createRenderer()
     int hRes, vRes;
     bool fullScreen = false;
 
-    m_settings.loadResolution(hRes, vRes, fullScreen);
+    m_settings.getResolution(hRes, vRes, fullScreen);
 
     const auto screens = QGuiApplication::screens();
 
@@ -390,14 +455,34 @@ void Game::init()
 
     m_trackLoader->loadAssets();
 
-    if (loadTracks())
-    {
-        initScene();
-    }
-    else
-    {
-        throw std::runtime_error("Couldn't load tracks.");
-    }
+    if(m_settings.getMenusDisabled()) {
+    	initScene();
+
+    	TrackData* t_data = m_trackLoader->loadTrack(m_settings.getCustomTrackFile(), false);
+
+    	if(!t_data) {
+    		throw std::runtime_error("Couldn't load tracks.");
+    	}
+
+    	_customTrack = std::shared_ptr<Track>(new Track(t_data));
+		m_scene->setActiveTrack(*_customTrack);
+
+		m_stateMachine->startGame();
+		m_scene->startRace();
+		InputHandler::setEnabled(true);
+
+	} else {
+
+		if (loadTracks())
+		{
+		    initScene();
+		}
+		else
+		{
+		    throw std::runtime_error("Couldn't load tracks.");
+		}
+
+	}
 
     start();
 }

@@ -22,6 +22,7 @@
 #include <QTranslator>
 
 #include <MCWorld>
+#include <memory>
 
 #include "application.hpp"
 #include "settings.hpp"
@@ -137,7 +138,7 @@ private:
 
     bool loadTracks();
 
-    void parseArgs(int argc, char ** argv);
+    void parseArgs();
 
     void start();
 
@@ -196,6 +197,8 @@ private:
     QThread * m_audioThread;
 
     MCWorld * m_world;
+
+    std::shared_ptr<Track> _customTrack;
 
     static Game * m_instance;
 };

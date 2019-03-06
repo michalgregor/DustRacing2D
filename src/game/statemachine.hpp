@@ -67,6 +67,8 @@ public:
     //! \reimp
     virtual void reset() override;
 
+    void startGame();
+
 public slots:
 
     void endFadeIn();

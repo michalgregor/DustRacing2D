@@ -103,6 +103,8 @@ public:
 
     void renderWorld(MCRenderGroup renderGroup, bool prepareRendering = false);
 
+    void startRace();
+
 signals:
 
     void listenerLocationChanged(float x, float y);
@@ -200,6 +202,8 @@ private:
 
     using AIVector = std::vector<AIPtr>;
     AIVector m_ai;
+
+	float m_cameraSmoothing;
 
     // Bridges
     std::vector<MCObjectPtr> m_bridges;

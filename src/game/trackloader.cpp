@@ -172,8 +172,24 @@ void TrackLoader::sortTracks()
     }
 }
 
-TrackData * TrackLoader::loadTrack(QString path)
+TrackData * TrackLoader::loadTrack(QString path, bool isFullPath)
 {
+    // search for the file, if necessary
+	if(!isFullPath) {
+		TrackData* data = nullptr;
+
+		for(const QString& prefix: m_paths) {
+			QDir dir(prefix);
+
+			if(dir.exists(path)) {
+				data = loadTrack(dir.filePath(path), true);
+				break;
+			}
+		}
+
+		return data;
+	}    
+
     QDomDocument doc;
 
     QFile file(path);

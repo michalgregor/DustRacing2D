@@ -185,7 +185,7 @@ void ResolutionMenu::enter()
             int  vRes       = 0;
             bool fullScreen = false;
 
-            Settings::instance().loadResolution(hRes, vRes, fullScreen);
+            Settings::instance().getResolution(hRes, vRes, fullScreen);
             if (resolution->hRes() == hRes && resolution->vRes() == vRes)
             {
                 resolution->setCurrent();

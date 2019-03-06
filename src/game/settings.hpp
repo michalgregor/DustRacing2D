@@ -52,6 +52,7 @@ public:
 
     void saveResolution(int hRes, int vRes, bool fullScreen);
     void loadResolution(int & hRes, int & vRes, bool & fullScreen);
+    void getResolution(int & hRes, int & vRes, bool & fullScreen);
 
     void saveKeyMapping(int player, InputHandler::Action action, int key);
     int loadKeyMapping(int player, InputHandler::Action action);
@@ -77,7 +78,88 @@ public:
 
     static QString vsyncKey();
 
+    int getLapCount();
+    void setLapCount(int lapCount);
+    void saveLapCount(int lapCount);
+    void resetLapCount();
+
+public:
+    void setMenusDisabled(bool menusDisabled) {
+    	m_menusDisabled = menusDisabled;
+    }
+
+    bool getMenusDisabled() const {
+    	return m_menusDisabled;
+    }
+
+    void setGameMode(const QString& gameMode) {
+    	m_gameMode = gameMode;
+    }
+
+    const QString& getGameMode() const {
+    	return m_gameMode;
+    }
+
+    const QString& getCustomTrackFile() const {
+    	return m_customTrackFile;
+    }
+
+    void setCustomTrackFile(const QString& customTrackFile) {
+    	m_customTrackFile = customTrackFile;
+    }
+
+    //! Sets the resolution as specified at command line.
+    void setTermResolution(int hRes, int vRes, bool fullScreen) {
+    	m_hRes = hRes;
+    	m_vRes = vRes;
+    	m_fullScreen = fullScreen;
+    }
+
+    void setUseTermResolution(bool useTermResolution) {
+    	m_useTermResolution = useTermResolution;
+    }
+
+    bool getDisableRendering() const {
+    	return m_disableRendering;
+    }
+
+    void setDisableRendering(bool disableRendering) {
+    	m_disableRendering = disableRendering;
+    	if(m_disableRendering) m_menusDisabled = true;
+    }
+
+    bool getResetStuckPlayer() const {
+        return m_resetStuckPlayer;
+    }
+
+    void setResetStuckPlayer(bool resetStuckPlayer) {
+        m_resetStuckPlayer = resetStuckPlayer;
+    }
+
+    float getCameraSmoothing() const {
+        return m_cameraSmoothing;
+    }
+
+    void setCameraSmoothing(float cameraSmoothing) {
+        m_cameraSmoothing = cameraSmoothing;
+    }
+
 private:
+QString m_customTrackFile;
+    bool m_menusDisabled;
+    QString m_gameMode;
+    int m_lapCount;
+    bool m_lapCountSet = false;
+
+    int m_hRes;
+    int m_vRes;
+    bool m_fullScreen;
+    bool m_useTermResolution = false;
+
+    bool m_disableRendering = false;
+    bool m_resetStuckPlayer = false;
+
+    float m_cameraSmoothing = 0.05;
 
     QString combineActionAndPlayer(int player, InputHandler::Action action);
 

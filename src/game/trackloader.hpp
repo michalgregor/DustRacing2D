@@ -68,12 +68,13 @@ public:
 
     static TrackLoader & instance();
 
-private:
-
     //! Load the given track.
+    //! @isFullPath Specifies whether path should be understood as the full
+    //! path to the file (default) or just its name.
     //! \return Valid data pointer or nullptr if fails.
-    TrackData * loadTrack(QString path);
+    TrackData * loadTrack(QString path, bool isFullPath = true);
 
+private:
     void sortTracks();
 
     //! Read a tile element.

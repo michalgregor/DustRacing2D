@@ -52,6 +52,24 @@ QString Settings::lapCountKey()
     return "lapCount";
 }
 
+int Settings::getLapCount() {
+	if(m_lapCountSet) return m_lapCount;
+	else return loadValue("lapCount", 5);
+}
+
+void Settings::setLapCount(int lapCount) {
+	m_lapCount = lapCount;
+	m_lapCountSet = true;
+}
+
+void Settings::saveLapCount(int lapCount) {
+	saveValue("lapCount", lapCount);
+}
+
+void Settings::resetLapCount() {
+	m_lapCountSet = false;
+}
+
 QString Settings::soundsKey()
 {
     return "sounds";
@@ -226,6 +244,20 @@ void Settings::loadResolution(int & hRes, int & vRes, bool & fullScreen)
     hRes       = settings.value("hRes", 0).toInt();
     vRes       = settings.value("vRes", 0).toInt();
     settings.endGroup();
+}
+
+/**
+ * If the resolution has been set from terminal, returns it. Otherwise calls
+ * loadResolution to get it from the settings file.
+ */
+void Settings::getResolution(int & hRes, int & vRes, bool & fullScreen) {
+	if(m_useTermResolution) {
+		hRes = m_hRes;
+		vRes = m_vRes;
+		fullScreen = m_fullScreen;
+	} else {
+		loadResolution(hRes, vRes, fullScreen);
+	}
 }
 
 void Settings::saveVSync(int value)
